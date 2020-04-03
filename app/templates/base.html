@@ -1,0 +1,14 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Locker Manager</title>
+      {% else %}
+      <title>Welcome to Locker Manager</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Locker Manager: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>

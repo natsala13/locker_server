@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ user.username }}!</h1>
+    {% for project in projects %}
+    <div>
+        <p>{{ project.id }}: <b>{{ project.description }}</b></p>
+        <p style="margin-left: 40px">With people:</p>
+        {% for user in project.team %}
+            <div><p style="margin-left: 60px">{{ user.username }}</p></div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+{% endblock %}
