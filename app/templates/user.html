@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <table>
-        <tr valign="top">
-            <td><img src="{{ user.avatar(128) }}"></td>
-            <td><h1>User: {{ user.username }}</h1></td>
-        </tr>
-    </table>
+    {% with size=128 %}
+        {% include '_one_user.html' %}
+    {% endwith %}
     <hr> <!-- Thats for indicating a new tab in html page-->
     {% for item in items %}
         {% with size=36 %}
