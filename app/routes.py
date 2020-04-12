@@ -73,12 +73,12 @@ def register():
 
     form = RegistrarionForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        u = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
 
-        db.session.add(user)
+        db.session.add(u)
         db.session.commit()
-        flash(f'Congratulation {user.username}! You were registered successfully!')
+        flash(f'Congratulation {u.username}! You were registered successfully!')
 
         return redirect(url_for('login'))
 
