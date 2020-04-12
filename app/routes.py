@@ -89,9 +89,10 @@ def register():
 @login_required
 def user(username):
     u = User.query.filter(User.username == username).first_or_404()
+    print(f'Found user: {u} with mail: {u.email}')
     items = [
-        {'author': u, 'body': 'Test Item #1'},
-        {'author': u, 'body': 'Test Item #2'}
+        {'id': 1, 'description': 'Test Item #1', 'author': u},
+        {'id': 2, 'description': 'Test Item #2', 'author': u}
     ]
 
     return render_template('user.html', user=u, items=items)

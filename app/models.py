@@ -1,6 +1,8 @@
 from app import db, login
 
+from hashlib import md5
 from datetime import datetime
+
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -21,10 +23,16 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def avatar(self, size):
+        mail_encode = md5(self.email.lower().encode('utf-8')).hexdigest()
+        identicon_param = 'identicon'  # Tell gravatar to generate new random ones
+        return f'https://www.gravatar.com/avatar/{mail_encode}?d={identicon_param}&s={size}'
+
 
 @login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+def load_user(user_id):
+    """Method for helping flask login module loading users."""
+    return User.query.get(int(user_id))
 
 
 class Item(db.Model):
