@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ user.username }}!</h1>
-    {% for project in projects %}
+    <h1>Hi, {{ login_user.username }}!</h1>
+    <h2>Here are all signed up users</h2>
+    {% for user in users %}
     <div>
-        <p>{{ project.id }}: <b>{{ project.description }}</b></p>
-        <p style="margin-left: 40px">With people:</p>
-        {% for user in project.team %}
-            <div><p style="margin-left: 60px">{{ user.username }}</p></div>
-        {% endfor %}
+        {% with size=64 %}
+            {% include '_one_user.html' %}
+        {% endwith %}
     </div>
     {% endfor %}
 {% endblock %}

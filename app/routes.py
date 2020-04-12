@@ -17,22 +17,9 @@ def hello_page():
 @app.route('/index')
 @login_required
 def index():
-    projects = [
-        {
-            'id': 1,
-            'tutor': {'username': 'Yaron'},
-            'team': [{'username': 'Shteren'}, {'username': 'Nathan'}],
-            'description': 'Locker manager website'
-        },
-        {
-            'id': 2,
-            'tutor': {'username': 'Boaz'},
-            'team': [{'username': 'Nati'}, {'username': 'Shteren'},  {'username': 'Nathan'}],
-            'description': 'Autonumus Arduino project'
-        }
-    ]
+    all_users = User.query.all()
 
-    return render_template('index.html', title='Home', user=current_user, projects=projects)
+    return render_template('index.html', title='Home', login_user=current_user, users=all_users)
 
 
 @app.route('/login', methods=['GET', 'POST'])
