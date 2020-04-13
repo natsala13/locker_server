@@ -57,8 +57,7 @@ def logout():
 def register():
     form = RegistrarionForm()
     if form.validate_on_submit():
-        u = User(username=form.username.data, email=form.email.data)
-        u.set_password(form.password.data)
+        u = User.new_user(username=form.username.data, email=form.email.data, password=form.password.data)
 
         db.session.add(u)
         db.session.commit()
@@ -88,3 +87,19 @@ def user(username):
     ]
 
     return render_template('user.html', user=u, items=items)
+
+
+@app.route('/print_hello/<username>', methods=['GET', 'POST'])
+@login_required
+def print_hello(username):
+    u = User.query.filter(User.username == username).first_or_404(description=
+                                                                  'Fatal Error! How could this user not exist??')
+
+    if u == current_user:
+        flash(f'Attention {u.username} You cannot remove yourself from the db')
+    else:
+        db.session.delete(u)
+        db.session.commit()
+        flash(f'User {u.username} was removed from database')
+
+    return redirect(url_for('index'))

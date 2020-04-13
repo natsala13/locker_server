@@ -14,8 +14,20 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     authorised_items = db.relationship('Item', backref='author', lazy='dynamic')
 
+    @classmethod
+    def new_user(cls, username, email, password):
+        u = cls()
+        u.username = username
+        u.email = email
+        u.set_password(password)
+
+        return u
+
     def __repr__(self):
         return f'<User: {self.username}>'
+
+    def __eq__(self, other):
+        return self.id == other.id
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
