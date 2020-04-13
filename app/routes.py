@@ -55,20 +55,25 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-
     form = RegistrarionForm()
     if form.validate_on_submit():
         u = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
+        u.set_password(form.password.data)
 
         db.session.add(u)
         db.session.commit()
         flash(f'Congratulation {u.username}! You were registered successfully!')
 
-        return redirect(url_for('login'))
+        # If next argument exist (and it is relative only) then redirect to it.
+        next_page = request.args.get('next')
+        if next_page and (not url_parse(next_page).netloc != ''):
+            return redirect(next_page)
 
+        # If no user was loged in then redirect to login page
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
+
+    # Else redirect to register page.
     return render_template('register.html', title='Register', form=form)
 
 

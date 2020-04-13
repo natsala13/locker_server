@@ -10,4 +10,5 @@
         {% endwith %}
     </div>
     {% endfor %}
+    <p><a href="{{ url_for('register', next=url_for('index')) }}">Add new user</a></p>
 {% endblock %}
