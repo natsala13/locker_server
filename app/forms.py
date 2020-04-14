@@ -28,3 +28,8 @@ class RegistrarionForm(FlaskForm):
         u = User.query.filter(User.email == email.data).first()
         if u:
             raise ValidationError('email already in use, please use another one')
+
+
+class QuickAddUserForm(FlaskForm):
+    name = StringField('Username', validators=[DataRequired()])
+    submit = SubmitField('Submit')

@@ -1,7 +1,7 @@
 from app import app
 from app import db
 from app.models import User
-from app.forms import LoginForm, RegistrarionForm
+from app.forms import LoginForm, RegistrarionForm, QuickAddUserForm
 
 from werkzeug.urls import url_parse
 from flask import render_template, flash, redirect, url_for, request
@@ -14,12 +14,15 @@ def hello_page():
     return f'Hello World {name}'
 
 
-@app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    all_users = User.query.all()
+    form = QuickAddUserForm()
+    if form.validate_on_submit():
+        quick_add_user(form.name.data)
 
-    return render_template('index.html', title='Home', login_user=current_user, users=all_users)
+    all_users = User.query.all()
+    return render_template('index.html', title='Home', login_user=current_user, users=all_users, quick_form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,9 +92,9 @@ def user(username):
     return render_template('user.html', user=u, items=items)
 
 
-@app.route('/print_hello/<username>', methods=['GET', 'POST'])
+@app.route('/delete_user/<username>', methods=['GET', 'POST'])
 @login_required
-def print_hello(username):
+def delete_user(username):
     u = User.query.filter(User.username == username).first_or_404(description=
                                                                   'Fatal Error! How could this user not exist??')
 
@@ -103,3 +106,11 @@ def print_hello(username):
         flash(f'User {u.username} was removed from database')
 
     return redirect(url_for('index'))
+
+
+def quick_add_user(username):
+    u = User.new_user(username=username, email=f'{username}@{username}.com', password=username)
+    db.session.add(u)
+    db.session.commit()
+
+    flash(f'Congratulation {u.username}! You were registered successfully!')
