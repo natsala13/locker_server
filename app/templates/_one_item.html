@@ -1,0 +1,10 @@
+<table>
+    <tr valign="top">
+        <td>Item: <a href="{{ url_for('item', id=item.id) }}"> {{ item.title }}</a><br></td>
+        <td>
+            <form action="{{ url_for('delete_item', id=item.id) }}" method="post">
+                <input type="submit" value="Remove">
+            </form>
+        </td>
+    </tr>
+</table>
