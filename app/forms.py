@@ -1,4 +1,4 @@
-from app.models import User
+from app.models import User, Item
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
@@ -33,3 +33,14 @@ class RegistrarionForm(FlaskForm):
 class QuickAddUserForm(FlaskForm):
     name = StringField('Username', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+class AddItemForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = StringField('Description')
+    submit = SubmitField('Submit')
+
+    def validate_title(self, title):
+        item = Item.query.filter(Item.title == title.data).first()
+        if item:
+            raise ValidationError('title already existing, please choose another one')

@@ -40,6 +40,16 @@ class User(UserMixin, db.Model):
         identicon_param = 'identicon'  # Tell gravatar to generate new random ones
         return f'https://www.gravatar.com/avatar/{mail_encode}?d={identicon_param}&s={size}'
 
+    def add_item(self, item_title):
+        item = Item.query.filter(Item.title == item_title).first()
+        if item.author:
+            raise Item.UnavailbleItem()
+
+        self.authorised_items.append(item)
+
+    def remove_item(self, item_title):
+        item = Item.query.filter(Item.title == item_title).first()
+        self.authorised_items.remove()
 
 @login.user_loader
 def load_user(user_id):
@@ -55,4 +65,15 @@ class Item(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'<Item {self.description}>'
+        return f'<Item {self.title}>'
+
+    @classmethod
+    def new_item(cls, title, description):
+        item = cls()
+        item.title = title
+        item.description = description
+
+        return item
+
+    class UnavailbleItem(BaseException):
+        pass

@@ -1,7 +1,7 @@
 <table>
     <tr valign="top">
         <td><img src="{{ user.avatar(size) }}"></td>
-        <td>User: <a href="{{ url_for('user', username=user.username) }}"> {{ user.username }}</a>,<br> Mail: {{ user.email }}<br></td>
+        <td>User: <a href="{{ url_for('user_description', username=user.username) }}"> {{ user.username }}</a>,<br> Mail: {{ user.email }}<br></td>
         <td>
             <form action="{{ url_for('delete_user', username=user.username) }}" method="post">
                 <input type="submit" value="Remove">
